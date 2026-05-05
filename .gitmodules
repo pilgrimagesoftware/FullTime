@@ -1,0 +1,6 @@
+[submodule "app"]
+	path = app
+	url = git@github.com:pilgrimagesoftware/football-scores-app.git
+[submodule "openligadb.rs"]
+	path = openligadb.rs
+	url = git@github.com:pilgrimagesoftware/openligadb.rs.git
