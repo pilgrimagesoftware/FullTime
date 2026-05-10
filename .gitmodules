@@ -4,3 +4,6 @@
 [submodule "Apps"]
 	path = Apps
 	url = git@github.com:pilgrimagesoftware/Fussballergebnisse-Apps.git
+[submodule "Data"]
+	path = Data
+	url = git@github.com:pilgrimagesoftware/Fussballergebnisse-Data.git
