@@ -1,6 +1,6 @@
-[submodule "app"]
-	path = app
-	url = git@github.com:pilgrimagesoftware/football-scores-app.git
-[submodule "openligadb.rs"]
-	path = openligadb.rs
-	url = git@github.com:pilgrimagesoftware/openligadb.rs.git
+[submodule "Libs"]
+	path = Libs
+	url = git@github.com:pilgrimagesoftware/Fussballergebnisse-Libs.git
+[submodule "Apps"]
+	path = Apps
+	url = git@github.com:pilgrimagesoftware/Fussballergebnisse-Apps.git
