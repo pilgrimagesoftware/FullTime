@@ -113,10 +113,9 @@ Commit messages follow the "Conventional Commits" format: https://www.convention
   development happens in the submodules.
 - **Language-Specific SDKs**: Each language SDK (Go, Python, Rust, Swift) is maintained as a 
   separate repository, allowing independent versioning and release cycles.
-- **Shared API Documentation**: The `dtrpg-sdk/api` submodule contains the source of truth for 
-  API specifications used across all SDK implementations.
-- **Nested Submodules**: Both `dtrpg-sdk` and `dtrpg-app` are meta-repositories themselves 
-  containing their own submodules. Use `--recursive` flags when appropriate.
+- **Nested Submodules**: Both `Fussballergebnisse-Apps` and `Fussballergebnisse-Libs` are 
+  meta-repositories themselves containing their own submodules. Use `--recursive` flags when 
+  appropriate.
 
 ## Common Issues
 
