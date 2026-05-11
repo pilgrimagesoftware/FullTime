@@ -103,6 +103,16 @@ process for branch creation and merging.
 - YAML files should always use the `.yaml` extension.
 - Code should always include doc comments.
 
+## GitHub Issues
+
+- When creating a new issue, use the "Bug Report" or "Feature Request" template if available.
+- When creating a new issue, assign the issue to me, and add the appropriate labels and type.
+- If the issue will contain multiple tasks, create sub-issues for each task as appropriate, 
+  but don't make them too granular.
+- When creating sub-issues, use the "Task" type and assign them to me.
+- When creating sub-issues, use the appropriate labels and type.
+- When creating a new issue, assign it to the "Football Scores" project.
+
 ## Commit Messages
 
 Commit messages follow the "Conventional Commits" format: https://www.conventionalcommits.org/en/v1.0.0/
