@@ -7,3 +7,6 @@
 [submodule "Data"]
 	path = Data
 	url = git@github.com:pilgrimagesoftware/Fussballergebnisse-Data.git
+[submodule "Design"]
+	path = Design
+	url = git@github.com:pilgrimagesoftware/FullTime-Design.git
