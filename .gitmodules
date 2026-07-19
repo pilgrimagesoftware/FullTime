@@ -10,3 +10,6 @@
 [submodule "Design"]
 	path = Design
 	url = git@github.com:pilgrimagesoftware/FullTime-Design.git
+[submodule "Plugins"]
+	path = Plugins
+	url = git@github.com:pilgrimagesoftware/FullTime-Plugins.git
