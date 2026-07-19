@@ -1,148 +1,113 @@
 # AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code), Codex (openai.com/codex/), GitHub 
-Copilot (copilot.github.com), and other models when working with code in this repository.
+This file provides guidance to Claude Code (claude.ai/code), Codex (openai.com/codex/), GitHub Copilot
+(copilot.github.com) when working with code in this repository.
 
 ## About This Project
 
-This is the master meta-repository for the Football App (Fussballergebnisse) project, which 
-organizes SDK libraries and desktop applications for display information about football 
-matches. The project uses a nested submodule architecture to manage multiple language 
-implementations.
+This is the master meta-repository for the Full Time project, which organizes SDK libraries and desktop applications
+for interacting with the Full Time API. The project uses a nested submodule architecture to manage libraries and plugins.
 
 ## OpenSpec Guidance
 
-OpenSpec is initialized in the top-level repo and in selected child repositories.
-
-- Use this repository (`Fussballergebnisse`) for umbrella changes that coordinate work across 
-  multiple repositories.
-- Use `app` for the Rust desktop application implementation.
-- Use `openliga.db` for the API for the Football App (Fussballergebnisse) project.
-- Update this document (`AGENTS.md`) as needed to reflect changes in the project, such as 
-  additional API libraries.
-
-Current preferred example chain:
-
-- Top-level umbrella: `Fussballergebnisse/openspec/changes/improve-auth-session-lifecycle`
-- Library child: `openliga.db/openspec/changes/define-auth-session-contract`
-
-## Repository Structure
-
-This repository contains submodules:
-
-- **Apps** - Desktop application meta-repository
-- **Data** - Data repository
-- **Libs** - Libraries meta-repository
+See @docs/openspec.md for OpenSpec guidance.
 
 ## Working with Submodules
 
-### Initial Setup
+See @docs/git-submodules.md for working with submodules.
 
-```bash
-# Clone with all nested submodules
-git clone --recursive git@github.com:pilgrimagesoftware/Fussballergebnisse.git
+## Committing Code 
 
-# Or initialize submodules after cloning
-git submodule update --init --recursive
+When committing code, always use the following commit message format, corresponding to the 
+[conventional commits](https://www.conventionalcommits.org/) standard:
+
 ```
-
-### Updating Submodules
-
-```bash
-# Update all submodules to latest commits on their tracked branches
-git submodule update --remote --merge
-
-# Update specific submodule
-git submodule update --remote --merge openliga.db
-
-# Update nested submodules within openliga.db
-cd openliga.db && git submodule update --remote --merge
-```
-
-### Checking Submodule Status
-
-```bash
-# Check status of direct submodules
-git submodule status
-
-# Check nested submodules
-cd openliga.db && git submodule status
-cd app && git submodule status
-```
-
-### Making Changes
-
-When making changes to submodules:
-1. Navigate into the submodule directory
-2. Make changes and commit within the submodule
-3. Push the submodule changes to its remote
-4. Return to the parent repository and commit the updated submodule reference
-5. Push the parent repository changes
-
-```bash
-cd openliga.db
-# Make changes, commit, push
-git add . && git commit -m "Update openliga.db SDK"
-git push
-
-cd /Users/paulyhedral/Code/Fussballergebnisse/openliga.db
-git add openliga.db
-git commit -m "Update openliga.db submodule"
-git push
+<type>(<scope>): <description>
 ```
 
 ## Repository Branches and Workflow
 
-All meta-repositories use the `master` branch as the source of truth.
-
-All code repositories use the `develop` branch as the source of truth, with the "Git Flow" 
-process for branch creation and merging.
+See @docs/git-repos.md and @docs/git-flow.md for repository structure, branches, workflow, and commit guidelines.
 
 ## Writing Code and Generating Files
 
 - YAML files should always use the `.yaml` extension.
 - Code should always include doc comments.
 
-## GitHub Issues
+- Rust: see @docs/rust.md
+- GitHub Actions: see @docs/github-actions.md
 
-- When creating a new issue, use the "Bug Report" or "Feature Request" template if available.
-- When creating a new issue, assign the issue to me, and add the appropriate labels and type.
-- If the issue will contain multiple tasks, create sub-issues for each task as appropriate, 
-  but don't make them too granular.
-- When creating sub-issues, use the "Task" type and assign them to me.
-- When creating sub-issues, use the appropriate labels and type.
-- When creating a new issue, assign it to the "Football Scores" project.
+## Code Exploration Policy
 
-## Commit Messages
+Always use jCodemunch-MCP tools for code navigation. Never fall back to Read, Grep, Glob, or Bash for code exploration.
+**Exception:** Use `Read` when you need to edit a file — the agent harness requires a `Read` before `Edit`/`Write` will succeed. Use jCodemunch tools to *find and understand* code, then `Read` only the specific file you're about to modify.
 
-Commit messages follow the "Conventional Commits" format: https://www.conventionalcommits.org/en/v1.0.0/
+**Start any session:**
+1. `resolve_repo { "path": "." }` — confirm the project is indexed. If not: `index_folder { "path": "." }`
+2. `suggest_queries` — when the repo is unfamiliar
 
-## Architecture Notes
+**Finding code:**
+- symbol by name → `search_symbols` (add `kind=`, `language=`, `file_pattern=`, `decorator=` to narrow)
+- decorator-aware queries → `search_symbols(decorator="X")` to find symbols with a specific decorator (e.g. `@property`, `@route`); combine with set-difference to find symbols *lacking* a decorator (e.g. "which endpoints lack CSRF protection?")
+- string, comment, config value → `search_text` (supports regex, `context_lines`)
+- database columns (dbt/SQLMesh) → `search_columns`
 
-- **Meta-repository Pattern**: This is a top-level organizational repository. Actual 
-  development happens in the submodules.
-- **Language-Specific SDKs**: Each language SDK (Go, Python, Rust, Swift) is maintained as a 
-  separate repository, allowing independent versioning and release cycles.
-- **Nested Submodules**: Both `Fussballergebnisse-Apps` and `Fussballergebnisse-Libs` are 
-  meta-repositories themselves containing their own submodules. Use `--recursive` flags when 
-  appropriate.
+**Reading code:**
+- before opening any file → `get_file_outline` first
+- one or more symbols → `get_symbol_source` (single ID → flat object; array → batch)
+- symbol + its imports → `get_context_bundle`
+- specific line range only → `get_file_content` (last resort)
 
-## Common Issues
+**Repo structure:**
+- `get_repo_outline` → dirs, languages, symbol counts
+- `get_file_tree` → file layout, filter with `path_prefix`
 
-### Detached HEAD State
+**Relationships & impact:**
+- what imports this file → `find_importers`
+- where is this name used → `find_references`
+- is this identifier used anywhere → `check_references`
+- file dependency graph → `get_dependency_graph`
+- what breaks if I change X → `get_blast_radius`
+- what symbols actually changed since last commit → `get_changed_symbols`
+- find unreachable/dead code → `find_dead_code`
+- class hierarchy → `get_class_hierarchy`
 
-Submodules often end up in detached HEAD state. Before making changes, ensure you're on a 
-branch:
+## Session-Aware Routing
 
-```bash
-cd <submodule-directory>
-git checkout master  # or appropriate branch
-```
+**Opening move for any task:**
+1. `plan_turn { "repo": "...", "query": "your task description", "model": "<your-model-id>" }` — get confidence + recommended files; the `model` parameter narrows the exposed tool list to match your capabilities at zero extra requests.
+2. Obey the confidence level:
+   - `high` → go directly to recommended symbols, max 2 supplementary reads
+   - `medium` → explore recommended files, max 5 supplementary reads
+   - `low` → the feature likely doesn't exist. Report the gap to the user. Do NOT search further hoping to find it.
+3. **One-call shortcut for a concrete task** — `assemble_task_context { "repo": "...", "task": "..." }` returns a single token-budgeted, source-attributed context capsule. It auto-classifies the task (explore / debug / refactor / extend / audit / review), auto-extracts anchor symbols, and runs the intent-appropriate sequence of the tools below end-to-end — so you get the whole context in one request instead of chaining the primitives by hand. Prefer it over a manual chain when the task is well-defined; fall back to step 1's routing when you need to decide *whether* the feature exists first.
 
-### Submodule Not Initialized
+**Interpreting search results:**
+- If `search_symbols` returns `negative_evidence` with `verdict: "no_implementation_found"`:
+  - Do NOT re-search with different terms hoping to find it
+  - Do NOT assume a related file (e.g. auth middleware) implements the missing feature (e.g. CSRF)
+  - DO report: "No existing implementation found for X. This would need to be created."
+  - DO check `related_existing` files — they show what's nearby, not what exists
+- If `verdict: "low_confidence_matches"`: examine the matches critically before assuming they implement the feature
 
-If a submodule directory is empty or shows errors:
+**After editing files:**
+- If PostToolUse hooks are installed (Claude Code only), edited files are auto-reindexed
+- Otherwise, call `register_edit` with edited file paths to invalidate caches and keep the index fresh
+- For bulk edits (5+ files), always use `register_edit` with all paths to batch-invalidate
 
-```bash
-git submodule update --init --recursive
-```
+**Token efficiency:**
+- If `_meta` contains `budget_warning`: stop exploring and work with what you have
+- If `auto_compacted: true` appears: results were automatically compressed due to turn budget
+- Use `get_session_context` to check what you've already read — avoid re-reading the same files
+
+## Model-Driven Tool Tiering
+
+Your jcodemunch-mcp server narrows the exposed tool list based on the model you are running as. To avoid wasting requests on primitives when a composite would do, always include `model="<your-model-id>"` in your opening `plan_turn` call.
+
+Replace `<your-model-id>` with your active model:
+- Claude Opus variants → `claude-opus-4-7` (or any `claude-opus-*`)
+- Claude Sonnet variants → `claude-sonnet-5`
+- Claude Haiku variants → `claude-haiku-4-5`
+- GPT-4o / GPT-5 / o1 / Llama → use the model id as printed by your runner
+
+The `model=` parameter rides on the existing `plan_turn` call — it does **not** add a separate tool invocation. If `plan_turn` is not appropriate for a non-code task, call `announce_model(model="...")` once instead.
