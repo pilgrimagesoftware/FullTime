@@ -1,4 +1,4 @@
-# Fussballergebnisse
+# Full Time
 
 Meta-repository for football scores desktop application
 
@@ -10,4 +10,4 @@ Meta-repository for football scores desktop application
 
 ## Technical Details
 
-- Written in Rust with Tauri as the UI
+- Written in Rust with Zed's GPUI as the UI
