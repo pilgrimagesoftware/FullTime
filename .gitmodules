@@ -1,6 +1,6 @@
 [submodule "Libs"]
 	path = Libs
-	url = git@github.com:pilgrimagesoftware/Fussballergebnisse-Libs.git
+	url = git@github.com:pilgrimagesoftware/FullTime-Libs.git
 [submodule "Apps"]
 	path = Apps
 	url = git@github.com:pilgrimagesoftware/Fussballergebnisse-Apps.git
